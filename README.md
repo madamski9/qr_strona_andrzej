@@ -73,3 +73,17 @@ cd stronaQr
 cd frontend
 npm run build
 ```
+
+## Railway (bez bledu JAVA_HOME)
+Jesli Railway pokazuje blad `JAVA_HOME is not set`, uruchamiasz backend przez Railpack bez Javy w runtime.
+
+Ustaw deployment backendu przez Dockerfile z root projektu:
+- Dockerfile: `Dockerfile` (w katalogu glownym repo)
+- Build/Start: automatycznie z Dockerfile
+
+Dla backendu ustaw zmienne:
+- `APP_ADMIN_PASSWORD`
+- `APP_CORS_ALLOWED_ORIGIN`
+- `SPRING_DATASOURCE_URL`
+- `SPRING_DATASOURCE_USERNAME`
+- `SPRING_DATASOURCE_PASSWORD`
