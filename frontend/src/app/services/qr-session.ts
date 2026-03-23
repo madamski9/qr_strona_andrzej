@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -14,6 +15,10 @@ export interface UserResponseDto {
   nickname: string;
   response: string;
   createdAt: Date;
+}
+
+export interface AdminLoginResponse {
+  token: string;
 }
 
 @Injectable({
@@ -32,8 +37,20 @@ export class QrSessionService {
     return this.http.get<SessionInfo>(`${this.apiUrl}/sessions/${sessionId}`);
   }
 
+  loginAdmin(password: string): Observable<AdminLoginResponse> {
+    return this.http.post<AdminLoginResponse>(`${this.apiUrl}/admin/login`, { password });
+  }
+
+  logoutAdmin(): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/admin/logout`, {}, this.getAdminHttpOptions());
+  }
+
   updateSessionQuestion(sessionId: string, question: string): Observable<SessionInfo> {
-    return this.http.put<SessionInfo>(`${this.apiUrl}/sessions/${sessionId}/question`, { question });
+    return this.http.put<SessionInfo>(
+      `${this.apiUrl}/sessions/${sessionId}/question`,
+      { question },
+      this.getAdminHttpOptions()
+    );
   }
 
   submitNickname(sessionId: string, nickname: string): Observable<{ userId: string }> {
@@ -53,10 +70,18 @@ export class QrSessionService {
   }
 
   getAllResponses(sessionId: string): Observable<UserResponseDto[]> {
-    return this.http.get<UserResponseDto[]>(`${this.apiUrl}/sessions/${sessionId}/responses`);
+    return this.http.get<UserResponseDto[]>(`${this.apiUrl}/sessions/${sessionId}/responses`, this.getAdminHttpOptions());
   }
 
   resetSession(sessionId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/sessions/${sessionId}/reset`, {});
+    return this.http.post<void>(`${this.apiUrl}/sessions/${sessionId}/reset`, {}, this.getAdminHttpOptions());
+  }
+
+  private getAdminHttpOptions() {
+    const token = localStorage.getItem('adminToken') || '';
+    const headers = new HttpHeaders({
+      'X-Admin-Token': token
+    });
+    return { headers };
   }
 }

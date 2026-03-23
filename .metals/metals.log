@@ -460,3 +460,70 @@ WARNING: Unmatched cancel notification for request id 410
 2026.03.23 17:38:15 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
 2026.03.23 17:38:15 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrSession.java. Using fallback presentation compiler.[0m
 2026.03.23 17:38:15 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:32 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:32 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java[0m
+2026.03.23 17:42:32 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:38 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:38 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java[0m
+2026.03.23 17:42:38 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:53 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/dto/SessionInfoDto.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:53 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/dto/SessionInfoDto.java[0m
+2026.03.23 17:42:53 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/dto/SessionInfoDto.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:54 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/dto/UserResponseDto.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:54 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/dto/UserResponseDto.java[0m
+2026.03.23 17:42:54 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/dto/UserResponseDto.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:54 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/dto/UserResponseDto.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:57 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrResponse.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:57 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrResponse.java[0m
+2026.03.23 17:42:57 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrResponse.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:57 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrResponse.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:57 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrSession.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:57 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrSession.java[0m
+2026.03.23 17:42:57 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrSession.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:59 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrUser.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:59 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrUser.java[0m
+2026.03.23 17:42:59 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrUser.java. Using fallback presentation compiler.[0m
+2026.03.23 17:42:59 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/entity/QrUser.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:01 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrResponseRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:01 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrResponseRepository.java[0m
+2026.03.23 17:43:01 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrResponseRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:01 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrResponseRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:01 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrSessionRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:02 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrSessionRepository.java[0m
+2026.03.23 17:43:01 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrSessionRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:02 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrSessionRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:03 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrUserRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:03 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrUserRepository.java[0m
+2026.03.23 17:43:03 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrUserRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:03 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/repository/QrUserRepository.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:05 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:05 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java[0m
+2026.03.23 17:43:05 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:06 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:43:31 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:45:22 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:45:22 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java[0m
+2026.03.23 17:45:28 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:45:28 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java[0m
+2026.03.23 17:45:35 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:45:35 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java[0m
+2026.03.23 17:46:10 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:10 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java[0m
+2026.03.23 17:46:10 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:10 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:12 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:12 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java[0m
+2026.03.23 17:46:12 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:13 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:13 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java[0m
+2026.03.23 17:46:13 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:13 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/AdminAuthController.java[0m
+2026.03.23 17:46:18 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:18 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java[0m
+2026.03.23 17:46:18 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:18 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:18 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java. Using fallback presentation compiler.[0m
+2026.03.23 17:46:20 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/controller/QrController.java[0m
+2026.03.23 17:48:18 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java. Using fallback presentation compiler.[0m
+2026.03.23 17:48:18 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java[0m
+2026.03.23 17:48:21 WARN  no build target for: /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/AdminAuthService.java[0m

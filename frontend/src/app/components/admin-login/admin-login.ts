@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { QrSessionService } from '../../services/qr-session';
 
 @Component({
   selector: 'app-admin-login',
@@ -13,13 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AdminLoginComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private qrService = inject(QrSessionService);
 
   password = '';
   isLoading = false;
   errorMessage = '';
   sessionId = '';
-
-  private ADMIN_PASSWORD = 'admin123'; // TODO: Change in production
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.paramMap.get('sessionId') || 'default';
@@ -34,17 +34,17 @@ export class AdminLoginComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    // Symulacja sprawdzenia hasła
-    setTimeout(() => {
-      if (this.password === this.ADMIN_PASSWORD) {
-        localStorage.setItem('adminPassword', this.password);
+    this.qrService.loginAdmin(this.password).subscribe({
+      next: (result) => {
+        localStorage.setItem('adminToken', result.token);
         this.router.navigate([`/qr/${this.sessionId}/admin`]);
-      } else {
-        this.errorMessage = 'Nieprawidłowe hasło';
+      },
+      error: () => {
+        this.errorMessage = 'Nieprawidlowe haslo';
         this.password = '';
         this.isLoading = false;
       }
-    }, 300);
+    });
   }
 
   goBack(): void {

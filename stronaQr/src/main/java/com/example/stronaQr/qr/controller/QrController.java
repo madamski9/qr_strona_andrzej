@@ -2,6 +2,7 @@ package com.example.stronaQr.qr.controller;
 
 import com.example.stronaQr.qr.dto.SessionInfoDto;
 import com.example.stronaQr.qr.dto.UserResponseDto;
+import com.example.stronaQr.qr.service.AdminAuthService;
 import com.example.stronaQr.qr.service.QrSessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class QrController {
     private final QrSessionService qrSessionService;
+    private final AdminAuthService adminAuthService;
 
     @PostMapping("/sessions")
     public ResponseEntity<SessionInfoDto> createSession(@RequestBody Map<String, String> request) {
@@ -33,8 +35,10 @@ public class QrController {
     @PutMapping("/sessions/{sessionId}/question")
     public ResponseEntity<SessionInfoDto> updateSessionQuestion(
             @PathVariable String sessionId,
+            @RequestHeader("X-Admin-Token") String adminToken,
             @RequestBody Map<String, String> request
     ) {
+        adminAuthService.requireAdmin(adminToken);
         String question = request.get("question");
         SessionInfoDto sessionInfo = qrSessionService.updateSessionQuestion(sessionId, question);
         return ResponseEntity.ok(sessionInfo);
@@ -71,13 +75,21 @@ public class QrController {
     }
 
     @GetMapping("/sessions/{sessionId}/responses")
-    public ResponseEntity<List<UserResponseDto>> getSessionResponses(@PathVariable String sessionId) {
+    public ResponseEntity<List<UserResponseDto>> getSessionResponses(
+            @PathVariable String sessionId,
+            @RequestHeader("X-Admin-Token") String adminToken
+    ) {
+        adminAuthService.requireAdmin(adminToken);
         List<UserResponseDto> responses = qrSessionService.getSessionResponses(sessionId);
         return ResponseEntity.ok(responses);
     }
 
     @PostMapping("/sessions/{sessionId}/reset")
-    public ResponseEntity<Void> resetSession(@PathVariable String sessionId) {
+    public ResponseEntity<Void> resetSession(
+            @PathVariable String sessionId,
+            @RequestHeader("X-Admin-Token") String adminToken
+    ) {
+        adminAuthService.requireAdmin(adminToken);
         qrSessionService.resetSession(sessionId);
         return ResponseEntity.ok().build();
     }

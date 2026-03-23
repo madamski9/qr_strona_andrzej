@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard {
+export class AdminGuard implements CanActivate {
   constructor(private router: Router) {}
 
-  canActivate: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-    const adminPassword = localStorage.getItem('adminPassword');
+  canActivate(route: ActivatedRouteSnapshot): boolean {
+    const adminToken = localStorage.getItem('adminToken');
     const sessionId = route.paramMap.get('sessionId');
 
-    if (adminPassword) {
+    if (adminToken) {
       return true;
     }
 
@@ -22,5 +22,5 @@ export class AdminGuard {
     }
 
     return false;
-  };
+  }
 }

@@ -159,8 +159,18 @@ export class AdminPanelComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('adminPassword');
-    this.router.navigate(['/']);
+    this.qrService.logoutAdmin().subscribe({
+      next: () => {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminPassword');
+        this.router.navigate(['/']);
+      },
+      error: () => {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminPassword');
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   goBack() {
