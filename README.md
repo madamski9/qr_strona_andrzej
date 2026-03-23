@@ -87,3 +87,14 @@ Dla backendu ustaw zmienne:
 - `SPRING_DATASOURCE_URL`
 - `SPRING_DATASOURCE_USERNAME`
 - `SPRING_DATASOURCE_PASSWORD`
+
+Backend obsluguje tez automatycznie zmienne z Railway Postgres:
+- `PGHOST`
+- `PGPORT`
+- `PGDATABASE`
+- `PGUSER`
+- `PGPASSWORD`
+
+Priorytet jest taki:
+- jesli ustawisz `SPRING_DATASOURCE_*`, aplikacja uzyje tych wartosci
+- w przeciwnym razie uzyje `PG*` z Railway
