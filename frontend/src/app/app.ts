@@ -11,7 +11,5 @@ export class App {
   protected readonly title = signal('frontend');
 
   constructor() {
-    console.log('✅ App component initialized');
-    console.log('✅ Router outlet should render landing page');
   }
 }

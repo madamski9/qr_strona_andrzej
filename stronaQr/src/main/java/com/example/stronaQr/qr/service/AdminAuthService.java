@@ -17,11 +17,15 @@ public class AdminAuthService {
 
     private final Map<String, Instant> activeTokens = new ConcurrentHashMap<>();
 
-    @Value("${app.admin.password:KSM3D-MS23F-%MA1@-KASL!-93MFD}")
+    @Value("${app.admin.password}")
     private String configuredAdminPassword;
 
     public String login(String password) {
         cleanupExpiredTokens();
+
+        if (configuredAdminPassword == null || configuredAdminPassword.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Brak konfiguracji APP_ADMIN_PASSWORD");
+        }
 
         if (password == null || !password.equals(configuredAdminPassword)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nieprawidlowe haslo admina");
