@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QrSessionService } from '../../services/qr-session';
+import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
   selector: 'app-qr-login',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './qr-login.html',
   styleUrl: './qr-login.scss',
 })
@@ -33,6 +35,7 @@ export class QrLoginComponent implements OnInit {
     }
 
     this.isLoading = true;
+    this.error = '';
     this.qrService.submitNickname(this.sessionId, this.nickname).subscribe({
       next: (result) => {
         localStorage.setItem('userId', result.userId);
@@ -40,9 +43,14 @@ export class QrLoginComponent implements OnInit {
         this.router.navigate(['/qr', this.sessionId, 'respond']);
       },
       error: (err) => {
-        this.error = 'Błąd podczas logowania. Spróbuj ponownie.';
+        // Obsługa błędu z interceptora
+        if (err?.message) {
+          this.error = err.message;
+        } else {
+          this.error = 'Błąd podczas logowania. Spróbuj ponownie.';
+        }
         this.isLoading = false;
-        console.error(err);
+        console.error('Login error:', err);
       }
     });
   }

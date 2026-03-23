@@ -1,0 +1,42 @@
+<div class="landing-container">
+  <div class="landing-card">
+    <h1>Strona QR</h1>
+    <p class="subtitle">Wpisz kod sesji lub zeskanuj kod QR</p>
+
+    <form (ngSubmit)="submitSessionId()">
+      <div class="form-group">
+        <label for="sessionId">Kod Sesji:</label>
+        <input
+          type="text"
+          id="sessionId"
+          [(ngModel)]="sessionId"
+          name="sessionId"
+          placeholder="np. default"
+          class="input-field"
+          [disabled]="isLoading"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="!sessionId || isLoading"
+      >
+        {{ isLoading ? 'Ładowanie...' : 'Wejdź' }}
+      </button>
+    </form>
+
+    <div class="divider">lub</div>
+
+    <div class="qr-section">
+      <p class="qr-text">Zeskanuj kod QR aby wejść na stronę</p>
+      <div class="qr-placeholder">
+        <p>Tutaj pojawi się czytnik QR</p>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

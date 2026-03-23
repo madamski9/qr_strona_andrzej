@@ -351,3 +351,5 @@ WARNING: Unmatched cancel notification for request id 259
 2026.03.23 16:09:39 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
 2026.03.23 16:09:40 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
 2026.03.23 16:09:40 INFO  no build target found for /Users/macciek/praca/andrzej_1/stronaQr/src/main/java/com/example/stronaQr/qr/service/QrSessionService.java. Using fallback presentation compiler.[0m
+mar 23, 2026 4:34:26 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+INFO: Unsupported notification method: $/setTrace

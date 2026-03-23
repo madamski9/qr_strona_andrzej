@@ -1,0 +1,43 @@
+<div class="admin-login-container">
+  <div class="admin-login-card">
+    <h1>🔐 Panel Admina</h1>
+    <p class="subtitle">Wpisz hasło aby uzyskać dostęp</p>
+
+    <form (ngSubmit)="submitPassword()">
+      <div class="form-group">
+        <label for="password">Hasło:</label>
+        <input
+          type="password"
+          id="password"
+          [(ngModel)]="password"
+          name="password"
+          placeholder="Wpisz hasło"
+          class="input-field"
+          [disabled]="isLoading"
+          (keyup.enter)="submitPassword()"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn-submit"
+        [disabled]="!password || isLoading"
+      >
+        {{ isLoading ? 'Sprawdzanie...' : 'Wejdź do Panelu' }}
+      </button>
+    </form>
+
+    <button
+      type="button"
+      class="btn-back"
+      (click)="goBack()"
+      [disabled]="isLoading"
+    >
+      ← Wróć
+    </button>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+</div>

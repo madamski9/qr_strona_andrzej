@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface SessionInfo {
   sessionId: string;
@@ -18,7 +19,7 @@ export interface UserResponseDto {
   providedIn: 'root',
 })
 export class QrSessionService {
-  private apiUrl = 'http://localhost:8080/api/qr';
+  private apiUrl = `${environment.apiUrl}/qr`;
 
   constructor(private http: HttpClient) {}
 
@@ -40,5 +41,17 @@ export class QrSessionService {
 
   getUserResponses(sessionId: string, userId: string): Observable<UserResponseDto[]> {
     return this.http.get<UserResponseDto[]>(`${this.apiUrl}/sessions/${sessionId}/user/${userId}`);
+  }
+
+  getSession(sessionId: string): Observable<SessionInfo> {
+    return this.http.get<SessionInfo>(`${this.apiUrl}/sessions/${sessionId}`);
+  }
+
+  getAllResponses(sessionId: string): Observable<UserResponseDto[]> {
+    return this.http.get<UserResponseDto[]>(`${this.apiUrl}/sessions/${sessionId}/responses`);
+  }
+
+  resetSession(sessionId: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/sessions/${sessionId}/reset`, {});
   }
 }

@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { QrSessionService, UserResponseDto } from '../../services/qr-session';
+import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
   selector: 'app-qr-response',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './qr-response.html',
   styleUrl: './qr-response.scss',
 })
@@ -48,6 +50,7 @@ export class QrResponseComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading responses:', err);
+        this.error = err?.message || 'Błąd podczas ładowania odpowiedzi';
         this.isLoading = false;
       }
     });
@@ -72,9 +75,9 @@ export class QrResponseComponent implements OnInit {
         setTimeout(() => (this.success = false), 3000);
       },
       error: (err) => {
-        this.error = 'Błąd podczas wysyłania odpowiedzi. Spróbuj ponownie.';
+        this.error = err?.message || 'Błąd podczas wysyłania odpowiedzi. Spróbuj ponownie.';
         this.isSubmitting = false;
-        console.error(err);
+        console.error('Submit error:', err);
       }
     });
   }

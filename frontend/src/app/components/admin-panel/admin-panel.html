@@ -1,0 +1,62 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>📊 Panel Admina</h1>
+    <div class="header-actions">
+      <button class="btn-logout" (click)="logout()">Wyloguj</button>
+      <button class="btn-back" (click)="goBack()">← Wróć</button>
+    </div>
+  </div>
+
+  <div class="session-info">
+    <p>Sesja: <strong>{{ sessionId }}</strong></p>
+    <p>Liczba odpowiedzi: <strong>{{ responses.length }}</strong></p>
+  </div>
+
+  <div class="table-container">
+    <table class="responses-table">
+      <thead>
+        <tr>
+          <th (click)="sort('nickname')" class="sortable">
+            Nick
+            <span class="sort-indicator" *ngIf="sortKey === 'nickname'">
+              {{ sortDirection === 'asc' ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="sort('response')" class="sortable">
+            Odpowiedź
+            <span class="sort-indicator" *ngIf="sortKey === 'response'">
+              {{ sortDirection === 'asc' ? '▲' : '▼' }}
+            </span>
+          </th>
+          <th (click)="sort('createdAt')" class="sortable">
+            Data
+            <span class="sort-indicator" *ngIf="sortKey === 'createdAt'">
+              {{ sortDirection === 'asc' ? '▲' : '▼' }}
+            </span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let response of sortedResponses">
+          <td>{{ response.nickname }}</td>
+          <td class="response-cell">{{ response.response }}</td>
+          <td>{{ response.createdAt | date: 'dd.MM.yyyy HH:mm' }}</td>
+        </tr>
+        <tr *ngIf="responses.length === 0" class="empty-row">
+          <td colspan="3" class="empty-text">Brak odpowiedzi w tej sesji</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="admin-actions">
+    <button class="btn-reset" (click)="resetSession()" [disabled]="isResetting">
+      {{ isResetting ? 'Resetowanie...' : '🔄 Resetuj Sesję' }}
+    </button>
+    <p class="reset-warning">Resetowanie usunie wszystkie odpowiedzi i użytkowników</p>
+  </div>
+
+  <div *ngIf="successMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+</div>
