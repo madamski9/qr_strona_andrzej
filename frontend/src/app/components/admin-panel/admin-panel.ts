@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QrSessionService, UserResponseDto } from '../../services/qr-session';
 
@@ -9,7 +10,7 @@ type SortDirection = 'asc' | 'desc';
 @Component({
   selector: 'app-admin-panel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin-panel.html',
   styleUrl: './admin-panel.scss',
 })
@@ -22,12 +23,46 @@ export class AdminPanelComponent implements OnInit {
   responses: UserResponseDto[] = [];
   sortKey: SortKey = 'createdAt';
   sortDirection: SortDirection = 'desc';
+  showFilters = false;
+  filterNickname = '';
+  filterResponse = '';
+  filterDate = '';
+  questionText = '';
+  isSavingQuestion = false;
   isResetting = false;
   successMessage = '';
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.paramMap.get('sessionId') || 'default';
+    this.loadSessionInfo();
     this.loadResponses();
+  }
+
+  loadSessionInfo() {
+    this.qrService.getSessionInfo(this.sessionId).subscribe({
+      next: (session) => {
+        this.questionText = session.question || 'Wpisz swoją odpowiedź';
+      },
+      error: () => {
+        this.questionText = 'Wpisz swoją odpowiedź';
+      }
+    });
+  }
+
+  saveQuestion() {
+    this.isSavingQuestion = true;
+    this.qrService.updateSessionQuestion(this.sessionId, this.questionText).subscribe({
+      next: (session) => {
+        this.questionText = session.question;
+        this.successMessage = 'Pytanie zostało zapisane.';
+        this.isSavingQuestion = false;
+        setTimeout(() => (this.successMessage = ''), 3000);
+      },
+      error: (err) => {
+        console.error('Error saving question:', err);
+        this.isSavingQuestion = false;
+      }
+    });
   }
 
   loadResponses() {
@@ -50,8 +85,37 @@ export class AdminPanelComponent implements OnInit {
     }
   }
 
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
+  }
+
+  clearFilters() {
+    this.filterNickname = '';
+    this.filterResponse = '';
+    this.filterDate = '';
+  }
+
+  get filteredResponses(): UserResponseDto[] {
+    const nicknameFilter = this.filterNickname.trim().toLowerCase();
+    const responseFilter = this.filterResponse.trim().toLowerCase();
+    const dateFilter = this.filterDate.trim();
+
+    return this.responses.filter((item) => {
+      const createdAtDate = new Date(item.createdAt);
+      const createdAtDay = Number.isNaN(createdAtDate.getTime())
+        ? ''
+        : createdAtDate.toISOString().slice(0, 10);
+
+      const matchesNickname = !nicknameFilter || item.nickname.toLowerCase().includes(nicknameFilter);
+      const matchesResponse = !responseFilter || item.response.toLowerCase().includes(responseFilter);
+      const matchesDate = !dateFilter || createdAtDay === dateFilter;
+
+      return matchesNickname && matchesResponse && matchesDate;
+    });
+  }
+
   get sortedResponses(): UserResponseDto[] {
-    const sorted = [...this.responses];
+    const sorted = [...this.filteredResponses];
     const direction = this.sortDirection === 'asc' ? 1 : -1;
 
     sorted.sort((a, b) => {
@@ -83,7 +147,7 @@ export class AdminPanelComponent implements OnInit {
     this.qrService.resetSession(this.sessionId).subscribe({
       next: () => {
         this.responses = [];
-        this.successMessage = '✅ Sesja resetowana pomyślnie!';
+        this.successMessage = 'Sesja została zresetowana pomyślnie.';
         this.isResetting = false;
         setTimeout(() => (this.successMessage = ''), 3000);
       },
@@ -96,10 +160,10 @@ export class AdminPanelComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('adminPassword');
-    this.router.navigate([`/qr/${this.sessionId}/login`]);
+    this.router.navigate(['/']);
   }
 
   goBack() {
-    this.router.navigate([`/qr/${this.sessionId}/login`]);
+    this.router.navigate(['/']);
   }
 }

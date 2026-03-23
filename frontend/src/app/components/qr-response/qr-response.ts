@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QrSessionService, UserResponseDto } from '../../services/qr-session';
-import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
   selector: 'app-qr-response',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './qr-response.html',
   styleUrl: './qr-response.scss',
 })
@@ -21,11 +20,13 @@ export class QrResponseComponent implements OnInit {
   isSubmitting = false;
   error = '';
   success = false;
+  currentQuestion = 'Wpisz swoją odpowiedź';
   userResponses: UserResponseDto[] = [];
 
   constructor(
     private qrService: QrSessionService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -34,11 +35,23 @@ export class QrResponseComponent implements OnInit {
     this.nickname = localStorage.getItem('nickname') || '';
 
     if (!this.userId) {
-      window.location.href = `/qr/${this.sessionId}/login`;
+      window.location.href = '/';
       return;
     }
 
     this.loadResponses();
+    this.loadQuestion();
+  }
+
+  loadQuestion() {
+    this.qrService.getSessionInfo(this.sessionId).subscribe({
+      next: (session) => {
+        this.currentQuestion = session.question || 'Wpisz swoją odpowiedź';
+      },
+      error: () => {
+        this.currentQuestion = 'Wpisz swoją odpowiedź';
+      }
+    });
   }
 
   loadResponses() {
@@ -67,12 +80,9 @@ export class QrResponseComponent implements OnInit {
     this.success = false;
 
     this.qrService.submitResponse(this.sessionId, this.userId, this.responseText).subscribe({
-      next: (response) => {
-        this.success = true;
-        this.responseText = '';
-        this.userResponses.push(response);
+      next: () => {
         this.isSubmitting = false;
-        setTimeout(() => (this.success = false), 3000);
+        this.router.navigate([`/qr/${this.sessionId}/saved`]);
       },
       error: (err) => {
         this.error = err?.message || 'Błąd podczas wysyłania odpowiedzi. Spróbuj ponownie.';
@@ -84,6 +94,6 @@ export class QrResponseComponent implements OnInit {
 
   logout() {
     localStorage.clear();
-    window.location.href = `/qr/${this.sessionId}/login`;
+    window.location.href = '/';
   }
 }

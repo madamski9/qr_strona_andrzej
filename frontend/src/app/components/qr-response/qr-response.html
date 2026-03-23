@@ -1,14 +1,6 @@
-<app-navbar [sessionId]="sessionId"></app-navbar>
 <div class="response-container">
   <div class="response-card">
-    <div class="header">
-      <div class="nickname-display">
-        <strong>Nick:</strong> {{ nickname }}
-      </div>
-      <button class="logout-btn" (click)="logout()">Wyloguj</button>
-    </div>
-
-    <h1>Wpisz swoją odpowiedź</h1>
+    <h1>{{ currentQuestion }}</h1>
 
     <form (ngSubmit)="submitResponse()">
       <div class="form-group">
@@ -33,10 +25,6 @@
 
     <div *ngIf="error" class="error-message">
       {{ error }}
-    </div>
-
-    <div *ngIf="success" class="success-message">
-      ✓ Odpowiedź wysłana pomyślnie!
     </div>
 
     <div *ngIf="userResponses.length > 0" class="responses-section">

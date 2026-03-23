@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 export interface SessionInfo {
   sessionId: string;
   status: 'active' | 'closed';
+  question: string;
 }
 
 export interface UserResponseDto {
@@ -29,6 +30,10 @@ export class QrSessionService {
 
   getSessionInfo(sessionId: string): Observable<SessionInfo> {
     return this.http.get<SessionInfo>(`${this.apiUrl}/sessions/${sessionId}`);
+  }
+
+  updateSessionQuestion(sessionId: string, question: string): Observable<SessionInfo> {
+    return this.http.put<SessionInfo>(`${this.apiUrl}/sessions/${sessionId}/question`, { question });
   }
 
   submitNickname(sessionId: string, nickname: string): Observable<{ userId: string }> {

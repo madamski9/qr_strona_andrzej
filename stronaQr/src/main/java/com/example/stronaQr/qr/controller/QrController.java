@@ -30,6 +30,16 @@ public class QrController {
         return ResponseEntity.ok(sessionInfo);
     }
 
+    @PutMapping("/sessions/{sessionId}/question")
+    public ResponseEntity<SessionInfoDto> updateSessionQuestion(
+            @PathVariable String sessionId,
+            @RequestBody Map<String, String> request
+    ) {
+        String question = request.get("question");
+        SessionInfoDto sessionInfo = qrSessionService.updateSessionQuestion(sessionId, question);
+        return ResponseEntity.ok(sessionInfo);
+    }
+
     @PostMapping("/sessions/{sessionId}/login")
     public ResponseEntity<Map<String, String>> submitNickname(
             @PathVariable String sessionId,

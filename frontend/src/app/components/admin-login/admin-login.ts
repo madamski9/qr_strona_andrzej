@@ -48,6 +48,6 @@ export class AdminLoginComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate([`/qr/${this.sessionId}/login`]);
+    this.router.navigate(['/']);
   }
 }

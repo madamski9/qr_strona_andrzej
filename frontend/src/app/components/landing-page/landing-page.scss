@@ -18,8 +18,10 @@
   border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   padding: 40px;
+  padding-bottom: 52px;
   max-width: 400px;
   width: 100%;
+  position: relative;
 }
 
 h1 {
@@ -145,4 +147,28 @@ label {
   border-radius: 8px;
   border: 1px solid #fcc;
   font-size: 14px;
+}
+
+.admin-row {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+}
+
+.admin-link {
+  display: inline-block;
+  color: #9ca3af;
+  background: transparent;
+  border: none;
+  padding: 2px 4px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #6b7280;
+  }
 }

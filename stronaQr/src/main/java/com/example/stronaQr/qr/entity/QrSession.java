@@ -27,6 +27,9 @@ public class QrSession {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "question", columnDefinition = "TEXT")
+    private String question;
+
     public enum SessionStatus {
         ACTIVE, CLOSED
     }
@@ -36,6 +39,9 @@ public class QrSession {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
         status = SessionStatus.ACTIVE;
+        if (question == null || question.isBlank()) {
+            question = "Wpisz swoją odpowiedź";
+        }
     }
 
     @PreUpdate

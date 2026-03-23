@@ -1,41 +1,45 @@
 <div class="admin-container">
   <div class="admin-header">
-    <h1>📊 Panel Admina</h1>
+    <h1>Panel Admina</h1>
     <div class="header-actions">
       <button class="btn-logout" (click)="logout()">Wyloguj</button>
-      <button class="btn-back" (click)="goBack()">← Wróć</button>
+      <button class="btn-back" (click)="goBack()">Wróć</button>
     </div>
   </div>
 
   <div class="session-info">
     <p>Sesja: <strong>{{ sessionId }}</strong></p>
     <p>Liczba odpowiedzi: <strong>{{ responses.length }}</strong></p>
+    <button class="btn-filter" [class.active]="showFilters" (click)="toggleFilters()" [attr.aria-expanded]="showFilters" aria-label="Filtruj wyniki" title="Filtruj wyniki">
+      <span class="filter-icon" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <div class="question-editor">
+    <label for="questionText" class="question-label">Pytanie dla użytkowników</label>
+    <textarea
+      id="questionText"
+      [(ngModel)]="questionText"
+      class="question-input"
+      rows="3"
+      placeholder="Wpisz pytanie, które ma widzieć każdy"
+    ></textarea>
+    <button class="btn-save-question" (click)="saveQuestion()" [disabled]="isSavingQuestion">
+      {{ isSavingQuestion ? 'Zapisywanie...' : 'Zapisz pytanie' }}
+    </button>
+  </div>
+
+  <div class="filters-panel" *ngIf="showFilters">
+    <div class="filters-grid">
+      <input type="text" [(ngModel)]="filterNickname" placeholder="Filtr nick" class="filter-input" />
+      <input type="text" [(ngModel)]="filterResponse" placeholder="Filtr odpowiedź" class="filter-input" />
+      <input type="date" [(ngModel)]="filterDate" class="filter-input" />
+    </div>
+    <button class="btn-clear-filters" (click)="clearFilters()">Wyczyść filtry</button>
   </div>
 
   <div class="table-container">
     <table class="responses-table">
-      <thead>
-        <tr>
-          <th (click)="sort('nickname')" class="sortable">
-            Nick
-            <span class="sort-indicator" *ngIf="sortKey === 'nickname'">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-          </th>
-          <th (click)="sort('response')" class="sortable">
-            Odpowiedź
-            <span class="sort-indicator" *ngIf="sortKey === 'response'">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-          </th>
-          <th (click)="sort('createdAt')" class="sortable">
-            Data
-            <span class="sort-indicator" *ngIf="sortKey === 'createdAt'">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-          </th>
-        </tr>
-      </thead>
       <tbody>
         <tr *ngFor="let response of sortedResponses">
           <td>{{ response.nickname }}</td>
@@ -45,13 +49,16 @@
         <tr *ngIf="responses.length === 0" class="empty-row">
           <td colspan="3" class="empty-text">Brak odpowiedzi w tej sesji</td>
         </tr>
+        <tr *ngIf="responses.length > 0 && sortedResponses.length === 0" class="empty-row">
+          <td colspan="3" class="empty-text">Brak wyników dla wybranych filtrów</td>
+        </tr>
       </tbody>
     </table>
   </div>
 
   <div class="admin-actions">
     <button class="btn-reset" (click)="resetSession()" [disabled]="isResetting">
-      {{ isResetting ? 'Resetowanie...' : '🔄 Resetuj Sesję' }}
+      {{ isResetting ? 'Resetowanie...' : 'Resetuj sesję' }}
     </button>
     <p class="reset-warning">Resetowanie usunie wszystkie odpowiedzi i użytkowników</p>
   </div>

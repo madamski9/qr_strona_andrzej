@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 public class SessionInfoDto {
     private String sessionId;
     private String status;
+    private String question;
 
     public static SessionInfoDto fromEntity(QrSession session) {
         return SessionInfoDto.builder()
                 .sessionId(session.getSessionId())
                 .status(session.getStatus().toString())
+            .question(session.getQuestion())
                 .build();
     }
 }

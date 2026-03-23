@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QrSessionService } from '../../services/qr-session';
-import { NavbarComponent } from '../navbar/navbar';
 
 @Component({
   selector: 'app-qr-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './qr-login.html',
   styleUrl: './qr-login.scss',
 })

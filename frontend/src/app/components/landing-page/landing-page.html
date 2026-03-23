@@ -1,17 +1,17 @@
 <div class="landing-container">
   <div class="landing-card">
     <h1>Strona QR</h1>
-    <p class="subtitle">Wpisz kod sesji lub zeskanuj kod QR</p>
+    <p class="subtitle">Wpisz swój nick aby kontynuować</p>
 
-    <form (ngSubmit)="submitSessionId()">
+    <form (ngSubmit)="submitNick()">
       <div class="form-group">
-        <label for="sessionId">Kod Sesji:</label>
+        <label for="nick">Twój Nick:</label>
         <input
           type="text"
-          id="sessionId"
-          [(ngModel)]="sessionId"
-          name="sessionId"
-          placeholder="np. default"
+          id="nick"
+          [(ngModel)]="nick"
+          name="nick"
+          placeholder="np. Tomek"
           class="input-field"
           [disabled]="isLoading"
         />
@@ -20,23 +20,18 @@
       <button
         type="submit"
         class="btn-submit"
-        [disabled]="!sessionId || isLoading"
+        [disabled]="!nick || isLoading"
       >
         {{ isLoading ? 'Ładowanie...' : 'Wejdź' }}
       </button>
     </form>
 
-    <div class="divider">lub</div>
-
-    <div class="qr-section">
-      <p class="qr-text">Zeskanuj kod QR aby wejść na stronę</p>
-      <div class="qr-placeholder">
-        <p>Tutaj pojawi się czytnik QR</p>
-      </div>
-    </div>
-
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
+    </div>
+
+    <div class="admin-row">
+      <button type="button" (click)="goToAdmin()" class="admin-link">Panel administratora</button>
     </div>
   </div>
 </div>

@@ -41,6 +41,24 @@ public class QrSessionService {
         return SessionInfoDto.fromEntity(session);
     }
 
+        public SessionInfoDto updateSessionQuestion(String sessionId, String question) {
+        QrSession session = sessionRepository.findById(sessionId)
+            .orElseGet(() -> {
+                QrSession newSession = QrSession.builder()
+                    .sessionId(sessionId)
+                    .build();
+                return sessionRepository.save(newSession);
+            });
+
+        String nextQuestion = (question == null || question.isBlank())
+            ? "Wpisz swoją odpowiedź"
+            : question.trim();
+
+        session.setQuestion(nextQuestion);
+        QrSession saved = sessionRepository.save(session);
+        return SessionInfoDto.fromEntity(saved);
+        }
+
     public String submitNickname(String sessionId, String nickname) {
         createOrGetSession(sessionId);
 
