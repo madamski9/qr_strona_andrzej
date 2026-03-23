@@ -1,0 +1,55 @@
+<div class="response-container">
+  <div class="response-card">
+    <div class="header">
+      <div class="nickname-display">
+        <strong>Nick:</strong> {{ nickname }}
+      </div>
+      <button class="logout-btn" (click)="logout()">Wyloguj</button>
+    </div>
+
+    <h1>Wpisz swoją odpowiedź</h1>
+
+    <form (ngSubmit)="submitResponse()">
+      <div class="form-group">
+        <textarea
+          [(ngModel)]="responseText"
+          name="response"
+          placeholder="Wpisz swoją odpowiedź tutaj..."
+          class="textarea-field"
+          [disabled]="isSubmitting"
+          rows="6"
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="submit-btn"
+        [disabled]="isSubmitting || !responseText.trim()"
+      >
+        {{ isSubmitting ? 'Wysyłanie...' : 'Wyślij odpowiedź' }}
+      </button>
+    </form>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="success" class="success-message">
+      ✓ Odpowiedź wysłana pomyślnie!
+    </div>
+
+    <div *ngIf="userResponses.length > 0" class="responses-section">
+      <h2>Twoje odpowiedzi</h2>
+      <div class="responses-list">
+        <div *ngFor="let resp of userResponses" class="response-item">
+          <p>{{ resp.response }}</p>
+          <small>{{ resp.createdAt | date: 'short' }}</small>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+      Ładowanie...
+    </div>
+  </div>
+</div>
