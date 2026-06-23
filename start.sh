@@ -140,13 +140,47 @@ fi
 
 ok "Zmienne .env: OK"
 
-# ─── 4. Uruchomienie ──────────────────────────────────────────────────────────
+# ─── 4. Certyfikaty TLS ───────────────────────────────────────────────────────
+CERT_DIR="$SCRIPT_DIR/nginx/certs"
+mkdir -p "$CERT_DIR"
+
+if [ ! -f "$CERT_DIR/localhost.pem" ] || [ ! -f "$CERT_DIR/localhost-key.pem" ]; then
+  echo ""
+  echo -e "${BOLD}Generowanie certyfikatu TLS...${NC}"
+
+  if command -v mkcert &>/dev/null; then
+    mkcert -install 2>/dev/null || true
+    mkcert -cert-file "$CERT_DIR/localhost.pem" \
+           -key-file  "$CERT_DIR/localhost-key.pem" \
+           localhost 127.0.0.1 ::1
+    ok "Certyfikat: wygenerowany przez mkcert (zaufany przez przeglądarkę)"
+  elif command -v openssl &>/dev/null; then
+    openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+      -keyout "$CERT_DIR/localhost-key.pem" \
+      -out    "$CERT_DIR/localhost.pem" \
+      -subj   "/CN=localhost" \
+      -addext "subjectAltName=DNS:localhost,IP:127.0.0.1" \
+      2>/dev/null
+    warn "Certyfikat: self-signed (openssl). Przeglądarka pokaże ostrzeżenie."
+    warn "Aby uniknąć ostrzeżenia zainstaluj mkcert:"
+    info "macOS:  brew install mkcert"
+    info "Linux:  https://github.com/FiloSottile/mkcert#installation"
+    info "Windows: choco install mkcert"
+  else
+    err "Brak mkcert i openssl — nie można wygenerować certyfikatu."
+    info "Zainstaluj mkcert: brew install mkcert"
+    exit 1
+  fi
+else
+  ok "Certyfikat TLS: już istnieje"
+fi
+
+# ─── 5. Uruchomienie ──────────────────────────────────────────────────────────
 echo ""
 echo -e "${BOLD}Uruchamianie aplikacji...${NC}"
 echo ""
-echo -e "  ${BOLD}Frontend:${NC}  http://localhost:4200"
-echo -e "  ${BOLD}Backend:${NC}   http://localhost:8080"
-echo -e "  ${BOLD}Baza:${NC}      localhost:5432"
+echo -e "  ${BOLD}Aplikacja:${NC} https://localhost"
+echo -e "  ${BOLD}Baza:${NC}      localhost:5432 (debug)"
 echo ""
 echo -e "  ${YELLOW}Ctrl+C${NC} — zatrzymaj wszystkie kontenery"
 echo ""

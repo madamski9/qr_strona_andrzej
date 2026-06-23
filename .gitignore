@@ -29,3 +29,6 @@ yarn-error.log*
 
 # Scala Metals / Bloop workspace metadata
 .metals/
+
+# TLS certificates (generated locally by start.sh)
+nginx/certs/
