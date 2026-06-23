@@ -1,11 +1,26 @@
 <div class="landing-container">
   <div class="landing-card">
+    <div class="card-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="4.5" y="4.5" width="3" height="3" rx="0.5" fill="currentColor"/>
+        <rect x="14" y="2" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="16.5" y="4.5" width="3" height="3" rx="0.5" fill="currentColor"/>
+        <rect x="2" y="14" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="4.5" y="16.5" width="3" height="3" rx="0.5" fill="currentColor"/>
+        <rect x="14" y="14" width="3" height="3" rx="0.5" fill="currentColor"/>
+        <rect x="19" y="14" width="3" height="3" rx="0.5" fill="currentColor"/>
+        <rect x="14" y="19" width="3" height="3" rx="0.5" fill="currentColor"/>
+        <rect x="19" y="19" width="3" height="3" rx="0.5" fill="currentColor"/>
+      </svg>
+    </div>
+
     <h1>Strona QR</h1>
-    <p class="subtitle">Wpisz swój nick aby kontynuować</p>
+    <p class="subtitle">Wpisz swój nick, aby kontynuować</p>
 
     <form (ngSubmit)="submitNick()">
       <div class="form-group">
-        <label for="nick">Twój Nick:</label>
+        <label for="nick">Twój nick</label>
         <input
           type="text"
           id="nick"
@@ -14,6 +29,7 @@
           placeholder="np. Tomek"
           class="input-field"
           [disabled]="isLoading"
+          autocomplete="off"
         />
       </div>
 
@@ -26,9 +42,9 @@
       </button>
     </form>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+    @if (errorMessage) {
+      <div class="error-message">{{ errorMessage }}</div>
+    }
 
     <div class="admin-row">
       <button type="button" (click)="goToAdmin()" class="admin-link">Panel administratora</button>

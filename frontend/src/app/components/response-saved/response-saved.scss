@@ -1,33 +1,87 @@
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes stroke {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes circlePulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
 .saved-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--bg-gradient);
+
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
 }
 
 .saved-card {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 32px;
-  max-width: 520px;
+  background: #fff;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  padding: 48px 40px 44px;
+  max-width: 420px;
   width: 100%;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: cardIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   h1 {
-    margin: 0 0 10px 0;
+    margin: 0 0 8px;
     font-size: 24px;
+    font-weight: 700;
     color: #111827;
+    letter-spacing: -0.4px;
   }
 
   p {
-    margin: 0 0 24px 0;
-    color: #4b5563;
+    margin: 0 0 32px;
+    color: #6b7280;
+    font-size: 15px;
   }
 }
 
+/* ── Animated checkmark ──────────────────────────────── */
+.success-icon {
+  margin: 0 auto 28px;
+  width: 76px;
+  height: 76px;
+}
+
+.checkmark {
+  width: 76px;
+  height: 76px;
+}
+
+.checkmark-circle {
+  stroke: var(--primary);
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: stroke 0.55s cubic-bezier(0.65, 0, 0.45, 1) forwards,
+             circlePulse 0.4s ease 0.9s both;
+}
+
+.checkmark-check {
+  stroke: var(--primary);
+  stroke-dasharray: 42;
+  stroke-dashoffset: 42;
+  animation: stroke 0.35s cubic-bezier(0.65, 0, 0.45, 1) 0.55s forwards;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
 .actions {
   display: flex;
   justify-content: center;
@@ -37,20 +91,33 @@
 
 .btn-primary,
 .btn-secondary {
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
   cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
 }
 
 .btn-primary {
-  border: 1px solid #111827;
-  background: #111827;
-  color: #ffffff;
+  border: none;
+  background: var(--bg-gradient);
+  color: #fff;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(79, 70, 229, 0.35);
+  }
 }
 
 .btn-secondary {
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  color: #111827;
+  border: 1.5px solid #e5e7eb;
+  background: #fff;
+  color: #374151;
+
+  &:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
 }

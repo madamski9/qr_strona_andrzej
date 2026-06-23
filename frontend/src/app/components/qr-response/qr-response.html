@@ -23,22 +23,26 @@
       </button>
     </form>
 
-    <div *ngIf="error" class="error-message">
-      {{ error }}
-    </div>
+    @if (error) {
+      <div class="error-message">{{ error }}</div>
+    }
 
-    <div *ngIf="userResponses.length > 0" class="responses-section">
-      <h2>Twoje odpowiedzi</h2>
-      <div class="responses-list">
-        <div *ngFor="let resp of userResponses" class="response-item">
-          <p>{{ resp.response }}</p>
-          <small>{{ resp.createdAt | date: 'short' }}</small>
+    @if (userResponses.length > 0) {
+      <div class="responses-section">
+        <h2>Twoje odpowiedzi</h2>
+        <div class="responses-list">
+          @for (resp of userResponses; track resp.createdAt) {
+            <div class="response-item">
+              <p>{{ resp.response }}</p>
+              <small>{{ resp.createdAt | date: 'short' }}</small>
+            </div>
+          }
         </div>
       </div>
-    </div>
+    }
 
-    <div *ngIf="isLoading" class="loading">
-      Ładowanie...
-    </div>
+    @if (isLoading) {
+      <div class="loading">Ładowanie...</div>
+    }
   </div>
 </div>

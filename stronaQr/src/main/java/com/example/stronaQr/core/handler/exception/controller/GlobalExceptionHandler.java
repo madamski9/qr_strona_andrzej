@@ -13,10 +13,37 @@ import com.example.stronaQr.core.handler.exception.ApiException;
 import com.example.stronaQr.core.handler.exception.dto.ErrorResponseDto;
 import com.example.stronaQr.core.handler.exception.enums.ErrorCode;
 
+import org.springframework.web.server.ResponseStatusException;
+
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponseDto> handleResponseStatusException(ResponseStatusException ex) {
+        ErrorResponseDto body = ErrorResponseDto.builder()
+            .code(ex.getStatusCode().toString())
+            .message(ex.getReason() != null ? ex.getReason() : ex.getMessage())
+            .timestamp(LocalDateTime.now())
+            .build();
+        return ResponseEntity.status(ex.getStatusCode()).body(body);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorResponseDto> handleRuntimeException(RuntimeException ex) {
+        String msg = ex.getMessage() != null ? ex.getMessage() : "Unexpected error";
+        boolean isNotFound = msg.contains("not found") || msg.contains("Not found");
+        HttpStatus status = isNotFound ? HttpStatus.NOT_FOUND : HttpStatus.INTERNAL_SERVER_ERROR;
+        ErrorCode code = isNotFound ? ErrorCode.NOT_FOUND : ErrorCode.INTERNAL_SERVER_ERROR;
+
+        ErrorResponseDto body = ErrorResponseDto.builder()
+            .code(code.name())
+            .message(msg)
+            .timestamp(LocalDateTime.now())
+            .build();
+        return ResponseEntity.status(status).body(body);
+    }
 
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponseDto> handleApiException(ApiException ex) {

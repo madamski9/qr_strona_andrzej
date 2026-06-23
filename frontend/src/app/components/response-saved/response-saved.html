@@ -1,10 +1,17 @@
 <div class="saved-container">
   <div class="saved-card">
-    <h1>Odpowiedź została zapisana pomyślnie</h1>
+    <div class="success-icon">
+      <svg class="checkmark" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="checkmark-circle" cx="26" cy="26" r="24" stroke-width="2.5"/>
+        <path class="checkmark-check" d="M14 27l8 8L38 17" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <h1>Odpowiedź zapisana!</h1>
     <p>Dziękujemy za przesłanie odpowiedzi.</p>
 
     <div class="actions">
-      <button type="button" class="btn-secondary" (click)="goBackToForm()">Dodaj kolejną odpowiedź</button>
+      <button type="button" class="btn-secondary" (click)="goBackToForm()">Dodaj kolejną</button>
       <button type="button" class="btn-primary" (click)="goHome()">Wróć na start</button>
     </div>
   </div>

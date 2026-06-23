@@ -1,17 +1,38 @@
 <div class="admin-container">
   <div class="admin-header">
-    <h1>Panel Admina</h1>
+    <h1>Panel admina</h1>
     <div class="header-actions">
-      <button class="btn-logout" (click)="logout()">Wyloguj</button>
-      <button class="btn-back" (click)="goBack()">Wróć</button>
+      <button class="btn-icon" (click)="logout()" title="Wyloguj">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Wyloguj
+      </button>
+      <button class="btn-icon btn-secondary" (click)="goBack()" title="Wróć">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Wróć
+      </button>
     </div>
   </div>
 
-  <div class="session-info">
-    <p>Sesja: <strong>{{ sessionId }}</strong></p>
-    <p>Liczba odpowiedzi: <strong>{{ responses.length }}</strong></p>
-    <button class="btn-filter" [class.active]="showFilters" (click)="toggleFilters()" [attr.aria-expanded]="showFilters" aria-label="Filtruj wyniki" title="Filtruj wyniki">
-      <span class="filter-icon" aria-hidden="true"></span>
+  <div class="stats-row">
+    <div class="stat-card">
+      <span class="stat-label">Sesja</span>
+      <span class="stat-value">{{ sessionId }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Odpowiedzi</span>
+      <span class="stat-value">{{ responses.length }}</span>
+    </div>
+    <button class="btn-filter" [class.active]="showFilters" (click)="toggleFilters()" [attr.aria-expanded]="showFilters" aria-label="Filtruj wyniki">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+      </svg>
+      Filtry
     </button>
   </div>
 
@@ -29,29 +50,53 @@
     </button>
   </div>
 
-  <div class="filters-panel" *ngIf="showFilters">
-    <div class="filters-grid">
-      <input type="text" [(ngModel)]="filterNickname" placeholder="Filtr nick" class="filter-input" />
-      <input type="text" [(ngModel)]="filterResponse" placeholder="Filtr odpowiedź" class="filter-input" />
-      <input type="date" [(ngModel)]="filterDate" class="filter-input" />
+  @if (showFilters) {
+    <div class="filters-panel">
+      <div class="filters-grid">
+        <input type="text" [(ngModel)]="filterNickname" placeholder="Filtr: nick" class="filter-input" />
+        <input type="text" [(ngModel)]="filterResponse" placeholder="Filtr: odpowiedź" class="filter-input" />
+        <input type="date" [(ngModel)]="filterDate" class="filter-input" />
+      </div>
+      <button class="btn-clear-filters" (click)="clearFilters()">Wyczyść filtry</button>
     </div>
-    <button class="btn-clear-filters" (click)="clearFilters()">Wyczyść filtry</button>
-  </div>
+  }
 
   <div class="table-container">
     <table class="responses-table">
+      <thead>
+        <tr>
+          <th class="sortable" (click)="sort('nickname')">
+            Nick
+            <span class="sort-indicator">{{ sortKey === 'nickname' ? (sortDirection === 'asc' ? '↑' : '↓') : '↕' }}</span>
+          </th>
+          <th class="sortable" (click)="sort('response')">
+            Odpowiedź
+            <span class="sort-indicator">{{ sortKey === 'response' ? (sortDirection === 'asc' ? '↑' : '↓') : '↕' }}</span>
+          </th>
+          <th class="sortable" (click)="sort('createdAt')">
+            Data
+            <span class="sort-indicator">{{ sortKey === 'createdAt' ? (sortDirection === 'asc' ? '↑' : '↓') : '↕' }}</span>
+          </th>
+        </tr>
+      </thead>
       <tbody>
-        <tr *ngFor="let response of sortedResponses">
-          <td>{{ response.nickname }}</td>
-          <td class="response-cell">{{ response.response }}</td>
-          <td>{{ response.createdAt | date: 'dd.MM.yyyy HH:mm' }}</td>
-        </tr>
-        <tr *ngIf="responses.length === 0" class="empty-row">
-          <td colspan="3" class="empty-text">Brak odpowiedzi w tej sesji</td>
-        </tr>
-        <tr *ngIf="responses.length > 0 && sortedResponses.length === 0" class="empty-row">
-          <td colspan="3" class="empty-text">Brak wyników dla wybranych filtrów</td>
-        </tr>
+        @for (response of sortedResponses; track response.createdAt) {
+          <tr>
+            <td class="cell-nick">{{ response.nickname }}</td>
+            <td class="response-cell">{{ response.response }}</td>
+            <td class="cell-date">{{ response.createdAt | date: 'dd.MM.yyyy HH:mm' }}</td>
+          </tr>
+        }
+        @if (responses.length === 0) {
+          <tr class="empty-row">
+            <td colspan="3" class="empty-text">Brak odpowiedzi w tej sesji</td>
+          </tr>
+        }
+        @if (responses.length > 0 && sortedResponses.length === 0) {
+          <tr class="empty-row">
+            <td colspan="3" class="empty-text">Brak wyników dla wybranych filtrów</td>
+          </tr>
+        }
       </tbody>
     </table>
   </div>
@@ -63,7 +108,7 @@
     <p class="reset-warning">Resetowanie usunie wszystkie odpowiedzi i użytkowników</p>
   </div>
 
-  <div *ngIf="successMessage" class="success-message">
-    {{ successMessage }}
-  </div>
+  @if (successMessage) {
+    <div class="success-message">{{ successMessage }}</div>
+  }
 </div>

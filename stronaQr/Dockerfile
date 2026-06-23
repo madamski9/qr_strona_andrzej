@@ -7,7 +7,7 @@ COPY stronaQr/build.gradle stronaQr/settings.gradle ./stronaQr/
 COPY stronaQr/src stronaQr/src
 
 WORKDIR /app/stronaQr
-RUN chmod +x gradlew && ./gradlew clean build -DskipTests --no-daemon
+RUN chmod +x gradlew && ./gradlew clean build -x test --no-daemon
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
