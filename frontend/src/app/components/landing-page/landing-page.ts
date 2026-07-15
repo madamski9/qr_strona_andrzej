@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { QrSessionService } from '../../services/qr-session';
 
 @Component({
   selector: 'app-landing-page',
@@ -14,15 +13,11 @@ import { environment } from '../../../environments/environment';
 })
 export class LandingPageComponent {
   private router = inject(Router);
-  private http = inject(HttpClient);
+  private qrService = inject(QrSessionService);
 
   nick = '';
   isLoading = false;
   errorMessage = '';
-
-  constructor() {
-    console.log('✅ LandingPageComponent loaded');
-  }
 
   submitNick(): void {
     if (!this.nick.trim()) {
@@ -33,29 +28,24 @@ export class LandingPageComponent {
     this.errorMessage = '';
     this.isLoading = true;
 
-    // Store nick in localStorage
     localStorage.setItem('userNick', this.nick);
+    localStorage.setItem('nickname', this.nick);
 
-    // Create user in backend with default session
-    const createUserUrl = `${environment.apiUrl}/qr/sessions/default/login`;
-    this.http.post<any>(createUserUrl, { nickname: this.nick }).subscribe(
-      (response) => {
-        // Store userId in localStorage
+    this.qrService.submitNickname('default', this.nick).subscribe({
+      next: (response) => {
         localStorage.setItem('userId', response.userId);
-        // Redirect to respond page
         this.router.navigate(['/qr/default/respond']);
         this.isLoading = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error creating user:', error);
         this.errorMessage = 'Błąd podczas wchodzenia na stronę';
         this.isLoading = false;
       }
-    );
+    });
   }
 
   goToAdmin(): void {
-    // Navigate to admin login with default session
     this.router.navigate(['/qr/default/admin-login']);
   }
 }

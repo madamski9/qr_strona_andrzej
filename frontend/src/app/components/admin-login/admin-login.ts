@@ -35,8 +35,7 @@ export class AdminLoginComponent implements OnInit {
     this.errorMessage = '';
 
     this.qrService.loginAdmin(this.password).subscribe({
-      next: (result) => {
-        localStorage.setItem('adminToken', result.token);
+      next: () => {
         this.router.navigate([`/qr/${this.sessionId}/admin`]);
       },
       error: () => {

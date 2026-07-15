@@ -1,8 +1,8 @@
 # StronaQR
 
-Aplikacja do zbierania odpowiedzi od uczestników poprzez kod QR. Admin tworzy sesję z pytaniem, uczestnicy skanują QR i wpisują odpowiedź — admin widzi wyniki w czasie rzeczywistym.
+Aplikacja do zbierania odpowiedzi od uczestników poprzez kod QR. Admin tworzy sesję z pytaniem, uczestnicy skanują QR i wpisują odpowiedź — admin widzi wyniki w panelu.
 
-**Stack:** Angular 21 · Spring Boot 3 · PostgreSQL 16 · nginx · Docker
+**Stack:** Angular 21 · Firebase (Firestore, Authentication, Hosting)
 
 ---
 
@@ -10,68 +10,68 @@ Aplikacja do zbierania odpowiedzi od uczestników poprzez kod QR. Admin tworzy s
 
 ### Wymagania
 
-| Narzędzie | Wersja | Uwagi |
-|-----------|--------|-------|
-| Docker Desktop | 3.4+ | Zawiera Docker Compose v2 |
-| mkcert *(opcjonalne)* | dowolna | Certyfikat HTTPS zaufany przez przeglądarkę |
+| Narzędzie | Uwagi |
+|-----------|-------|
+| Node.js 22 | do budowania i uruchamiania Angulara |
+| Firebase CLI (`npm i -g firebase-tools`) | do wdrożeń i zarządzania regułami Firestore |
+| Dostęp do projektu Firebase `qr-andrzej` | (`firebase login`, potem `firebase use qr-andrzej`) |
 
-### Uruchomienie
+### Uruchomienie lokalne (dev)
 
 ```bash
-# 1. Skopiuj i uzupełnij zmienne środowiskowe
-cp .env.example .env
-# edytuj .env (patrz sekcja Konfiguracja)
-
-# 2. Uruchom (generuje certyfikat, buduje obrazy, startuje kontenery)
-./start.sh
+cd frontend
+npm install
+npm start
+# UI dostępne na http://localhost:4200, łączy się bezpośrednio z projektem Firebase qr-andrzej
 ```
 
-Aplikacja dostępna pod **https://localhost**
+Konfiguracja Firebase (apiKey, projectId itd.) jest wpisana w `frontend/src/environments/environment.ts` / `environment.prod.ts` — to publiczne dane, bezpieczeństwo zapewniają Firestore Security Rules (`firestore.rules`), a nie ukrywanie configu.
 
-> `start.sh` automatycznie sprawdza czy masz Dockera, Docker Compose i plik `.env`,  
-> a następnie generuje certyfikat TLS (mkcert → bez ostrzeżenia przeglądarki,  
-> openssl → self-signed z ostrzeżeniem). Przy kolejnych uruchomieniach certyfikat jest pomijany.
-
-Zatrzymanie:
+### Wdrożenie
 
 ```bash
-docker compose down
+# jednorazowo: reguły i indeksy Firestore
+firebase deploy --only firestore:rules,firestore:indexes
+
+# przy każdej zmianie frontendu
+cd frontend && npm run build
+cd ..
+firebase deploy --only hosting
 ```
 
 ---
 
-## Konfiguracja
+## Konfiguracja jednorazowa w konsoli Firebase
 
-Skopiuj `.env.example` do `.env` i uzupełnij:
-
-```env
-POSTGRES_DB=strona_qr
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=silne_haslo
-
-APP_ADMIN_PASSWORD=twoje_haslo_admina
-APP_CORS_ALLOWED_ORIGIN=https://localhost
-
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-```
+1. **Firestore** → utwórz bazę w trybie Native (jeśli jeszcze nie istnieje).
+2. **Authentication → Sign-in method** → włącz dostawcę **Email/Password**.
+3. **Authentication → Users** → dodaj jednego użytkownika: e-mail `admin@qr-andrzej.internal` (stała wartość zaszyta w `frontend/src/app/firebase.ts`) i dowolne hasło — to hasło wpisujesz w ekranie logowania admina w aplikacji.
 
 ---
 
 ## Architektura
 
 ```
-Przeglądarka (https://localhost)
-        │
-        ▼
-   nginx :443          # reverse proxy + TLS termination
-    ├── /api/ ──►  backend:8080   # Spring Boot REST API
-    └── /     ──►  frontend:80   # Angular SPA (statyczne pliki)
-                         │
-                    PostgreSQL:5432
+Przeglądarka
+     │
+     ▼
+Firebase Hosting (Angular SPA, statyczne pliki)
+     │
+     ├── Firestore       # sesje, uczestnicy, odpowiedzi
+     └── Firebase Auth    # logowanie admina (Email/Password)
 ```
 
-Wszystkie kontenery komunikują się w izolowanej sieci Dockera.  
-Na zewnątrz eksponowane są tylko porty **443** (HTTPS), **80** (redirect → HTTPS) i **5432** (baza, debug).
+Cała logika, która wcześniej żyła w backendzie (Spring Boot + Postgres), jest teraz realizowana przez klienta (Firestore/Auth SDK) i wymuszana przez `firestore.rules`.
+
+### Model danych Firestore
+
+```
+sessions/{sessionId}                                  { sessionId, status: 'active'|'closed', question, createdAt, updatedAt }
+sessions/{sessionId}/users/{userId}                    { sessionId, nickname, createdAt }
+sessions/{sessionId}/users/{userId}/responses/{id}     { sessionId, userId, nickname, response, createdAt }
+```
+
+Uczestnik zna tylko swój `userId` (jak dawniej — brak realnej autentykacji uczestnika) i może czytać/tworzyć tylko własną podkolekcję `responses`. Admin (zalogowany przez Firebase Auth) czyta wszystkie odpowiedzi sesji przez `collectionGroup` query — patrz `firestore.rules`.
 
 ---
 
@@ -79,41 +79,30 @@ Na zewnątrz eksponowane są tylko porty **443** (HTTPS), **80** (redirect → H
 
 ```
 .
-├── frontend/               # Angular 21
-│   ├── src/app/
-│   │   ├── components/     # landing-page, qr-response, admin-panel, ...
-│   │   ├── services/       # QrSessionService
-│   │   └── guards/         # AdminGuard, AuthGuard
-│   ├── nginx.conf          # konfiguracja nginx dla frontendu
-│   └── Dockerfile
+├── frontend/                     # Angular 21
+│   └── src/app/
+│       ├── components/           # landing-page, qr-login, qr-response, admin-login, admin-panel, ...
+│       ├── services/qr-session.ts  # cała logika Firestore/Auth
+│       ├── guards/               # AdminGuard (Firebase Auth), AuthGuard, SessionGuard
+│       └── firebase.ts           # inicjalizacja Firebase App/Firestore/Auth
 │
-├── stronaQr/               # Spring Boot 3 (Gradle)
-│   └── src/main/java/
-│       └── com/example/stronaQr/
-│           ├── qr/         # kontrolery, serwisy, encje, repozytoria
-│           └── core/       # obsługa wyjątków
-│
-├── nginx/
-│   ├── nginx.conf          # reverse proxy (HTTPS + routing)
-│   └── certs/              # certyfikaty TLS (generowane przez start.sh, w .gitignore)
-│
-├── docker-compose.yml
-├── start.sh                # jednokomendowe uruchomienie z walidacją zależności
-└── .env.example
+├── firebase.json                 # konfiguracja Hosting + wskazanie plików reguł/indeksów
+├── .firebaserc                    # alias projektu (qr-andrzej)
+├── firestore.rules                # reguły bezpieczeństwa Firestore
+└── firestore.indexes.json         # indeks collection-group dla odpowiedzi (admin)
 ```
 
 ---
 
 ## Panel administratora
 
-1. Wejdź na **https://localhost** i kliknij *Panel administratora*  
-   (lub przejdź bezpośrednio na `/qr/default/admin-login`)
-2. Wpisz hasło z `APP_ADMIN_PASSWORD`
+1. Wejdź na stronę główną i kliknij *Panel administratora* (lub `/qr/default/admin-login`).
+2. Wpisz hasło ustawione dla użytkownika `admin@qr-andrzej.internal` w Firebase Authentication.
 3. W panelu możesz:
-   - ustawić pytanie widoczne dla uczestników
-   - przeglądać odpowiedzi (filtrowanie po nicku, treści, dacie)
-   - sortować kolumny klikając nagłówki tabeli
-   - zresetować sesję (usuwa wszystkie odpowiedzi i użytkowników)
+   - ustawić pytanie widoczne dla uczestników,
+   - przeglądać odpowiedzi (filtrowanie po nicku, treści, dacie),
+   - sortować kolumny klikając nagłówki tabeli,
+   - zresetować sesję (usuwa wszystkie odpowiedzi i użytkowników, zamyka sesję).
 
 ---
 
@@ -131,71 +120,3 @@ Na zewnątrz eksponowane są tylko porty **443** (HTTPS), **80** (redirect → H
         ▼
   Potwierdzenie zapisu
 ```
-
----
-
-## API
-
-Baza URL: `/api/qr`
-
-| Metoda | Endpoint | Opis |
-|--------|----------|------|
-| `POST` | `/sessions` | Utwórz lub pobierz sesję |
-| `GET` | `/sessions/{id}` | Info o sesji (pytanie, status) |
-| `PUT` | `/sessions/{id}/question` | Zmień pytanie *(wymaga X-Admin-Token)* |
-| `POST` | `/sessions/{id}/login` | Zaloguj uczestnika (zwraca userId) |
-| `POST` | `/sessions/{id}/response` | Wyślij odpowiedź |
-| `GET` | `/sessions/{id}/responses` | Wszystkie odpowiedzi *(wymaga X-Admin-Token)* |
-| `POST` | `/sessions/{id}/reset` | Resetuj sesję *(wymaga X-Admin-Token)* |
-| `POST` | `/api/qr/admin/login` | Zaloguj admina (zwraca token) |
-| `POST` | `/api/qr/admin/logout` | Wyloguj admina |
-
----
-
-## Lokalne uruchomienie bez Dockera
-
-Wymaga: Java 21, Node.js 22, PostgreSQL działającego lokalnie.
-
-**Backend:**
-```bash
-cd stronaQr
-./gradlew bootRun
-# API dostępne na http://localhost:8080
-```
-
-**Frontend (dev server):**
-```bash
-cd frontend
-npm ci
-npm start
-# UI dostępne na http://localhost:4200
-```
-
-**Testy backendu:**
-```bash
-cd stronaQr
-./gradlew test
-```
-
----
-
-## Deployment
-
-### Railway (backend)
-
-Ustaw zmienne środowiskowe w panelu Railway:
-
-```
-APP_ADMIN_PASSWORD
-APP_CORS_ALLOWED_ORIGIN
-SPRING_DATASOURCE_URL
-SPRING_DATASOURCE_USERNAME
-SPRING_DATASOURCE_PASSWORD
-SPRING_JPA_HIBERNATE_DDL_AUTO=update
-```
-
-Railway automatycznie eksportuje `PGHOST`, `PGPORT`, `PGDATABASE`, `PGUSER`, `PGPASSWORD` — backend czyta je jako fallback gdy `SPRING_DATASOURCE_*` nie są ustawione.
-
-### Vercel (frontend)
-
-Konfiguracja w `vercel.json`. Zbudowany Angular (SPA) jest serwowany statycznie.

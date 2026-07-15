@@ -64,12 +64,15 @@
 .checkmark {
   width: 76px;
   height: 76px;
+  overflow: visible;
 }
 
 .checkmark-circle {
   stroke: var(--primary);
   stroke-dasharray: 160;
   stroke-dashoffset: 160;
+  transform-box: fill-box;
+  transform-origin: center;
   animation: stroke 0.55s cubic-bezier(0.65, 0, 0.45, 1) forwards,
              circlePulse 0.4s ease 0.9s both;
 }

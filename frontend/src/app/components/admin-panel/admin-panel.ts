@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QrSessionService, UserResponseDto } from '../../services/qr-session';
+import { ThemeService } from '../../services/theme';
 
 type SortKey = 'nickname' | 'response' | 'createdAt';
 type SortDirection = 'asc' | 'desc';
@@ -18,6 +19,7 @@ export class AdminPanelComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private qrService = inject(QrSessionService);
+  private themeService = inject(ThemeService);
 
   sessionId = '';
   responses: UserResponseDto[] = [];
@@ -31,6 +33,7 @@ export class AdminPanelComponent implements OnInit {
   isSavingQuestion = false;
   isResetting = false;
   successMessage = '';
+  errorMessage = '';
 
   ngOnInit() {
     this.sessionId = this.route.snapshot.paramMap.get('sessionId') || 'default';
@@ -69,9 +72,11 @@ export class AdminPanelComponent implements OnInit {
     this.qrService.getAllResponses(this.sessionId).subscribe({
       next: (data) => {
         this.responses = data;
+        this.errorMessage = '';
       },
       error: (err) => {
         console.error('Error loading responses:', err);
+        this.errorMessage = err?.message || 'Błąd podczas ładowania odpowiedzi';
       }
     });
   }
@@ -160,20 +165,20 @@ export class AdminPanelComponent implements OnInit {
 
   logout() {
     this.qrService.logoutAdmin().subscribe({
-      next: () => {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminPassword');
-        this.router.navigate(['/']);
-      },
-      error: () => {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminPassword');
-        this.router.navigate(['/']);
-      }
+      next: () => this.router.navigate(['/']),
+      error: () => this.router.navigate(['/'])
     });
   }
 
   goBack() {
     this.router.navigate(['/']);
+  }
+
+  get isDarkTheme(): boolean {
+    return this.themeService.theme === 'dark';
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggle();
   }
 }
